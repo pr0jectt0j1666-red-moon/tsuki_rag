@@ -1,0 +1,56 @@
+[
+  {
+    "type": "single_hop",
+    "question": "How often must service accounts' passwords and tokens be rotated?",
+    "ground_truth": "every 90 days",
+    "source_excerpt": "Northwind Systems Operations Handbook\n2026\nInternal reference for engineering, support and people operations. Fictional company, written\nfor RAG testing.\nSection 1: Security Policy\nThis section define..."
+  },
+  {
+    "type": "multi_hop",
+    "question": "What are the retention periods for customer data and audit logs?",
+    "ground_truth": "customer data for 24 months, audit logs for 7 years",
+    "source_excerpt": "Northwind Systems Operations Handbook\n2026\nInternal reference for engineering, support and people operations. Fictional company, written\nfor RAG testing.\nSection 1: Security Policy\nThis section define..."
+  },
+  {
+    "type": "unanswerable",
+    "question": "Can a customer request the deletion of their data after 3 years?",
+    "ground_truth": "I cannot answer this based on the provided documents.",
+    "source_excerpt": "Northwind Systems Operations Handbook\n2026\nInternal reference for engineering, support and people operations. Fictional company, written\nfor RAG testing.\nSection 1: Security Policy\nThis section define..."
+  },
+  {
+    "type": "single_hop",
+    "question": "How many requests can a customer make per minute with the public API?",
+    "ground_truth": "600",
+    "source_excerpt": "on of their data at any time by contacting their account\nmanager or by emailing the privacy desk. Northwind Systems confirms receipt of a deletion\nrequest within 2 business days and completes the dele..."
+  },
+  {
+    "type": "multi-hop",
+    "question": "What is the maximum upload size for a file in the API, and what happens if a file is larger than that?",
+    "ground_truth": "50 MB, Larger files must be sent with the multipart upload endpoint.",
+    "source_excerpt": "on of their data at any time by contacting their account\nmanager or by emailing the privacy desk. Northwind Systems confirms receipt of a deletion\nrequest within 2 business days and completes the dele..."
+  },
+  {
+    "type": "unanswerable",
+    "question": "How many days of paid annual leave do full-time employees receive per year?",
+    "ground_truth": "I cannot answer this based on the provided documents.",
+    "source_excerpt": "on of their data at any time by contacting their account\nmanager or by emailing the privacy desk. Northwind Systems confirms receipt of a deletion\nrequest within 2 business days and completes the dele..."
+  },
+  {
+    "type": "single_hop",
+    "question": "What is the monthly uptime commitment for the production platform?",
+    "ground_truth": "99.95%",
+    "source_excerpt": "submitted within 30 days of the expense, with receipts attached.\nNorthwind Systems Operations Handbook 2026\nSection 5: Reliability, Disaster Recovery and Support\nNorthwind Systems commits to 99.95% mo..."
+  },
+  {
+    "type": "multi_hop",
+    "question": "What is the recovery time objective (RTO) and the recovery point objective (RPO) for disaster recovery?",
+    "ground_truth": "4 hours and 15 minutes",
+    "source_excerpt": "submitted within 30 days of the expense, with receipts attached.\nNorthwind Systems Operations Handbook 2026\nSection 5: Reliability, Disaster Recovery and Support\nNorthwind Systems commits to 99.95% mo..."
+  },
+  {
+    "type": "unanswerable",
+    "question": "How many employees does Northwind Systems have?",
+    "ground_truth": "I cannot answer this based on the provided documents.",
+    "source_excerpt": "submitted within 30 days of the expense, with receipts attached.\nNorthwind Systems Operations Handbook 2026\nSection 5: Reliability, Disaster Recovery and Support\nNorthwind Systems commits to 99.95% mo..."
+  }
+]

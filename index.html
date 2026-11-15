@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en" data-reality="eclipse">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TSUKI // Enterprise Knowledge Engine</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+<style>
+/* ===== 1. TOKENS / REALITIES ===== */
+:root{
+  --font-display:'Syne',sans-serif; --font-sans:'Space Grotesk',system-ui,sans-serif; --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --bg-base:#050405; --bg-g1:rgba(255,183,213,.13); --bg-g2:rgba(255,143,191,.10);
+  --glass-bg:rgba(16,11,14,.60); --glass-solid:#130d10; --glass-elev:rgba(28,18,23,.74);
+  --glass-border:rgba(255,255,255,.12); --glass-hi:rgba(255,255,255,.36);
+  --glass-shadow:0 24px 48px -12px rgba(0,0,0,.72), inset 0 1px 1px rgba(255,255,255,.25);
+  --neu:#0e0a0c; --neu-d:rgba(0,0,0,.9); --neu-l:rgba(70,42,54,.40);
+  --neu-inset:inset 4px 4px 10px var(--neu-d), inset -3px -3px 8px var(--neu-l);
+  --neu-ext:5px 5px 12px var(--neu-d), -3px -3px 9px var(--neu-l);
+  --text:#fdf2f7; --text-2:#d9b8c8; --text-3:#9a7586;
+  --a1:#ffb7d5; --a2:#ffd6e7; --a3:#ff8fbf; --glow:rgba(255,183,213,.45);
+  --grid:rgba(255,183,213,.06); --bracket:rgba(255,183,213,.55); --danger:#f87171; --warn:#fbbf24;
+  --moon-base:#f8c4d9; --moon-glow:rgba(255,183,213,.55);
+  --moon-tex:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 100'%3E%3Cg fill='rgba(80,20,45,.22)'%3E%3Ccircle cx='30' cy='30' r='14'/%3E%3Ccircle cx='75' cy='62' r='20'/%3E%3Ccircle cx='120' cy='25' r='9'/%3E%3Ccircle cx='150' cy='70' r='13'/%3E%3Ccircle cx='180' cy='35' r='11'/%3E%3Ccircle cx='55' cy='85' r='7'/%3E%3Ccircle cx='105' cy='88' r='6'/%3E%3Ccircle cx='15' cy='65' r='6'/%3E%3C/g%3E%3Cg fill='none' stroke='rgba(255,255,255,.28)' stroke-width='1.2'%3E%3Ccircle cx='30' cy='30' r='14'/%3E%3Ccircle cx='75' cy='62' r='20'/%3E%3Ccircle cx='120' cy='25' r='9'/%3E%3Ccircle cx='150' cy='70' r='13'/%3E%3Ccircle cx='180' cy='35' r='11'/%3E%3Ccircle cx='55' cy='85' r='7'/%3E%3Ccircle cx='105' cy='88' r='6'/%3E%3Ccircle cx='15' cy='65' r='6'/%3E%3C/g%3E%3C/svg%3E");
+}
+[data-reality="solar"]{
+  --bg-base:#060303; --bg-g1:rgba(239,68,68,.18); --bg-g2:rgba(185,28,28,.16);
+  --glass-bg:rgba(22,9,9,.60); --glass-solid:#170a0a; --glass-elev:rgba(36,13,13,.74);
+  --glass-border:rgba(255,200,200,.16); --glass-hi:rgba(255,220,220,.40);
+  --glass-shadow:0 24px 48px -12px rgba(0,0,0,.8), inset 0 1px 1px rgba(255,210,210,.30);
+  --neu:#100808; --neu-d:rgba(0,0,0,.9); --neu-l:rgba(90,30,30,.42);
+  --text:#fff1f1; --text-2:#e8b8b8; --text-3:#a56d6d;
+  --a1:#ef4444; --a2:#f87171; --a3:#ff6b6b; --glow:rgba(239,68,68,.5); --grid:rgba(239,68,68,.07); --bracket:rgba(239,68,68,.65);
+  --moon-base:#e5484d; --moon-glow:rgba(239,68,68,.55);
+}
+[data-reality="aether"]{
+  --bg-base:#f3ece0; --bg-g1:rgba(125,190,235,.28); --bg-g2:rgba(214,190,150,.30);
+  --glass-bg:rgba(255,250,242,.68); --glass-solid:#faf5ec; --glass-elev:rgba(255,252,246,.86);
+  --glass-border:rgba(90,70,40,.16); --glass-hi:rgba(255,255,255,.95);
+  --glass-shadow:0 20px 40px -15px rgba(70,55,30,.18), inset 0 1px 1px rgba(255,255,255,.9);
+  --neu:#ebe3d5; --neu-d:rgba(185,165,135,.6); --neu-l:rgba(255,253,247,.95);
+  --neu-inset:inset 4px 4px 9px var(--neu-d), inset -4px -4px 9px var(--neu-l);
+  --neu-ext:5px 5px 12px var(--neu-d), -5px -5px 12px var(--neu-l);
+  --text:#2b2218; --text-2:#5a4a38; --text-3:#8a7860;
+  --a1:#2b86d0; --a2:#7cc4f0; --a3:#5aa9e6; --glow:rgba(59,154,225,.35); --grid:rgba(120,90,50,.07); --bracket:rgba(43,134,208,.65);
+  --moon-base:#bcdcf5; --moon-glow:rgba(59,154,225,.35);
+}
+
+/* ===== 2. BASE ===== */
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg-base);color:var(--text);font-family:var(--font-sans);min-height:100vh;overflow-x:hidden;transition:background-color .6s ease,color .4s ease;
+  background-image:radial-gradient(60vw 50vh at 12% 8%,var(--bg-g1),transparent 70%),radial-gradient(55vw 50vh at 90% 92%,var(--bg-g2),transparent 70%);background-attachment:fixed}
+.mono{font-family:var(--font-mono)} .display{font-family:var(--font-display)}
+.muted{color:var(--text-2)} .dim{color:var(--text-3)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+:focus-visible{outline:2px solid var(--a1);outline-offset:2px}
+::-webkit-scrollbar{width:6px;height:6px}::-webkit-scrollbar-thumb{background:var(--glass-border);border-radius:99px}
+#bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0}
+.hud-grid{position:fixed;inset:0;z-index:1;pointer-events:none;background-image:linear-gradient(to right,var(--grid) 1px,transparent 1px),linear-gradient(to bottom,var(--grid) 1px,transparent 1px);background-size:64px 64px}
+
+/* ===== 3. LIQUID GLASS BENTO ===== */
+.app{position:relative;z-index:2;max-width:1680px;margin:0 auto;padding:14px;display:grid;gap:14px;grid-template-columns:repeat(12,minmax(0,1fr));grid-auto-rows:auto}
+.tile{position:relative;background:var(--glass-bg);backdrop-filter:blur(22px) saturate(165%);-webkit-backdrop-filter:blur(22px) saturate(165%);
+  border:1px solid var(--glass-border);border-radius:24px;box-shadow:var(--glass-shadow);overflow:hidden;min-width:0;display:flex;flex-direction:column;
+  transition:transform .18s cubic-bezier(.2,.8,.2,1),background .5s,border-color .5s,box-shadow .5s;will-change:transform}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.tile{background:var(--glass-solid)}}
+@media (prefers-reduced-transparency:reduce){.tile{background:var(--glass-solid);backdrop-filter:none;-webkit-backdrop-filter:none}}
+.tile::before{content:'';position:absolute;inset:0;border-radius:24px;padding:1px;pointer-events:none;opacity:.7;
+  background:linear-gradient(135deg,var(--glass-hi) 0%,rgba(255,255,255,.05) 38%,rgba(255,255,255,.01) 65%,var(--a1) 100%);
+  -webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.tile::after{content:'';position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(360px circle at var(--mx,50%) var(--my,50%),rgba(255,255,255,.10),transparent 65%)}
+.tile:hover::after{opacity:1}
+.tile-h{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 18px 8px;position:relative;z-index:3}
+.tile-h .eyebrow{font:500 10px var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.tile-h h2{margin:2px 0 0;font:700 17px var(--font-display);letter-spacing:-.01em}
+.tile-b{padding:6px 18px 18px;position:relative;z-index:3;flex:1;min-height:0;display:flex;flex-direction:column;gap:12px}
+.bento-perspective{perspective:1200px}
+
+.c-head{grid-column:span 12}
+.c-chat{grid-column:span 8;grid-row:span 2;min-height:640px;height:calc(100vh - 150px);max-height:860px}
+.c-sources{grid-column:span 4;min-height:300px}
+.c-controls{grid-column:span 4}
+.c-pipe{grid-column:span 3}.c-metrics{grid-column:span 3}.c-ingest{grid-column:span 3}.c-map{grid-column:span 3}
+@media (max-width:1280px){.c-chat{grid-column:span 12;grid-row:auto;height:70vh}.c-sources,.c-controls{grid-column:span 6}.c-pipe,.c-metrics,.c-ingest,.c-map{grid-column:span 6}}
+@media (max-width:720px){.c-sources,.c-controls,.c-pipe,.c-metrics,.c-ingest,.c-map{grid-column:span 12}.app{padding:10px;gap:10px}}
+
+/* ===== 4. NEUMORPHIC CONTROLS ===== */
+.neu-well{background:var(--neu);box-shadow:var(--neu-inset);border-radius:16px;border:1px solid rgba(255,255,255,.03)}
+.neu-btn{background:var(--neu);box-shadow:var(--neu-ext);border-radius:14px;border:1px solid rgba(255,255,255,.06);color:var(--text);cursor:pointer;font:500 11px var(--font-mono);letter-spacing:.06em;text-transform:uppercase;padding:8px 12px;transition:all .18s cubic-bezier(.22,1,.36,1)}
+.neu-btn:hover{transform:translateY(-1px);border-color:var(--a1)}
+.neu-btn:active,.neu-btn.active,.neu-btn[aria-pressed="true"]{box-shadow:var(--neu-inset);transform:translateY(1px);color:var(--a1)}
+.neu-btn:disabled{opacity:.45;cursor:not-allowed}
+input[type=range].slider{-webkit-appearance:none;appearance:none;width:100%;height:10px;background:var(--neu);box-shadow:var(--neu-inset);border-radius:999px;outline:none;cursor:pointer}
+input[type=range].slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;border-radius:50%;background:var(--a1);box-shadow:0 0 12px var(--glow),inset 0 2px 3px rgba(255,255,255,.6);border:2px solid var(--bg-base);cursor:grab}
+input[type=range].slider::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--a1);border:2px solid var(--bg-base);box-shadow:0 0 12px var(--glow)}
+.field{display:flex;flex-direction:column;gap:8px;padding:12px;}
+.field .lbl{display:flex;justify-content:space-between;font:500 11px var(--font-mono);letter-spacing:.04em}
+.field .lbl b{color:var(--a1)}
+select.neu-select{width:100%;background:var(--neu);box-shadow:var(--neu-inset);border:1px solid rgba(255,255,255,.04);border-radius:12px;color:var(--text);font:500 12px var(--font-mono);padding:9px 10px}
+.pill{display:inline-flex;align-items:center;gap:6px;font:500 10px var(--font-mono);letter-spacing:.06em;padding:3px 9px;border-radius:999px;border:1px solid var(--glass-border);background:rgba(255,255,255,.04)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--a1);box-shadow:0 0 8px var(--a1);display:inline-block}
+.dot.warn{background:var(--warn);box-shadow:0 0 8px var(--warn)} .dot.bad{background:var(--danger);box-shadow:0 0 8px var(--danger)}
+@keyframes beacon{0%,100%{opacity:1}50%{opacity:.4}} .beacon{animation:beacon 2s infinite}
+
+/* ===== 5. HEADER ===== */
+.head{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;padding:12px 18px}
+.head-l{display:flex;align-items:center}
+.brand{text-align:center}
+.brand b{display:block;font:800 24px var(--font-display);letter-spacing:.32em;padding-left:.32em}
+.brand small{display:block;margin-top:2px;font:400 10px var(--font-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--text-3)}
+.head-r{display:flex;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+@media (max-width:900px){.head{grid-template-columns:1fr;justify-items:center}.head-r{justify-content:center}}
+
+/* rotating moon: a crater texture scrolls across a shaded sphere */
+.moon{--d:40px;width:var(--d);height:var(--d);border-radius:50%;position:relative;flex:none;background-color:var(--moon-base);background-image:var(--moon-tex);background-size:calc(var(--d)*2) var(--d);background-repeat:repeat-x;animation:moonspin 28s linear infinite;box-shadow:0 0 calc(var(--d)*.3) var(--moon-glow)}
+.moon::after{content:'';position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 30%,rgba(255,255,255,.28) 0,transparent 38%,rgba(0,0,0,.5) 100%);box-shadow:inset calc(var(--d)*-.08) calc(var(--d)*-.08) calc(var(--d)*.2) rgba(0,0,0,.5)}
+@keyframes moonspin{to{background-position-x:calc(var(--d)*-2)}}
+.moon-bg{--d:380px;position:absolute;right:-110px;top:50%;margin-top:-190px;opacity:.2;pointer-events:none;z-index:1;animation-duration:70s}
+
+/* ===== 6. CHAT ===== */
+.chat-scroll{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:14px;padding:4px 2px;scroll-behavior:smooth}
+.msg{max-width:88%;padding:12px 14px;border-radius:18px;font-size:14px;line-height:1.6;user-select:text;overflow-wrap:anywhere}
+.msg.user{align-self:flex-end;background:var(--neu);box-shadow:var(--neu-inset);border-bottom-right-radius:6px}
+.msg.ai{align-self:flex-start;background:var(--glass-elev);border:1px solid var(--glass-border);box-shadow:inset 0 1px 1px var(--glass-hi);border-bottom-left-radius:6px}
+.msg.err{border-color:var(--danger)}
+.msg code{font-family:var(--font-mono);font-size:12px;background:rgba(127,127,127,.18);padding:1px 5px;border-radius:6px}
+.cite{font:600 10px var(--font-mono);color:var(--a1);background:transparent;border:1px solid var(--a1);border-radius:6px;padding:0 5px;margin:0 2px;cursor:pointer;vertical-align:super;line-height:1.5}
+.cite:hover{background:var(--a1);color:var(--bg-base)}
+.msg-tools{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.msg-tools .neu-btn{padding:4px 8px;font-size:10px;border-radius:10px}
+.caret{display:inline-block;width:7px;height:14px;background:var(--a1);vertical-align:text-bottom;animation:beacon 1s infinite;margin-left:2px}
+.empty{margin:auto;text-align:center;max-width:460px}
+.empty h3{font:800 28px/1.1 var(--font-display);margin:0 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:14px}
+.composer{display:flex;gap:10px;align-items:flex-end;padding:10px}
+.composer textarea{flex:1;background:transparent;border:0;outline:0;resize:none;color:var(--text);font:400 14px/1.5 var(--font-sans);max-height:140px;min-height:24px;padding:6px 4px}
+.composer textarea::placeholder{color:var(--text-3)}
+.send{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;padding:0;flex:none}
+.send svg{width:18px;height:18px}
+
+/* ===== 7. SOURCES ===== */
+.src-list{display:flex;flex-direction:column;gap:10px;overflow-y:auto;flex:1;min-height:0}
+.src{padding:11px 12px;border-radius:16px;background:var(--glass-elev);border:1px solid var(--glass-border);cursor:pointer;transition:all .2s;user-select:text}
+.src:hover{border-color:var(--a1)}
+.src.active{border-color:var(--a1);box-shadow:0 0 18px var(--glow)}
+.src .top{display:flex;justify-content:space-between;gap:8px;font:500 11px var(--font-mono)}
+.src .top b{color:var(--a1)} .src .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.src p{margin:6px 0 8px;font-size:12px;line-height:1.5;color:var(--text-2);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.bar{height:6px;border-radius:99px;background:var(--neu);box-shadow:var(--neu-inset);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--a2),var(--a1));box-shadow:0 0 10px var(--glow);transition:width .5s cubic-bezier(.22,1,.36,1)}
+.placeholder{margin:auto;text-align:center;font:400 12px var(--font-mono);color:var(--text-3);padding:20px}
+
+/* ===== 8. PIPELINE / METRICS / INGEST / MAP ===== */
+.pipe{display:flex;flex-direction:column;gap:8px}
+.stage{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:14px;background:var(--glass-elev);border:1px solid var(--glass-border);font:500 12px var(--font-mono);transition:all .25s}
+.stage .ms{margin-left:auto;color:var(--text-3)}
+.stage .dot{background:var(--text-3);box-shadow:none}
+.stage.run{border-color:var(--a2)} .stage.run .dot{background:var(--a2);box-shadow:0 0 10px var(--a2);animation:beacon .8s infinite}
+.stage.done{border-color:var(--a1)} .stage.done .dot{background:var(--a1);box-shadow:0 0 8px var(--a1)} .stage.done .ms{color:var(--a1)}
+.stage.skip{opacity:.5}
+.kv{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.kv div{padding:10px 12px;border-radius:14px}
+.kv small{display:block;font:500 10px var(--font-mono);letter-spacing:.08em;color:var(--text-3);text-transform:uppercase}
+.kv b{font:700 18px var(--font-display)}
+.spark{display:flex;align-items:flex-end;gap:4px;height:54px;padding:8px}
+.spark i{flex:1;border-radius:4px;background:linear-gradient(to top,var(--a1),var(--a2));min-height:3px;transition:height .4s}
+.drop{border:1.5px dashed var(--glass-border);border-radius:16px;padding:16px;text-align:center;font:400 12px var(--font-mono);color:var(--text-2);cursor:pointer;transition:all .2s}
+.drop:hover,.drop.over{border-color:var(--a1);color:var(--a1);background:rgba(127,127,127,.06)}
+.docs{display:flex;flex-direction:column;gap:8px;max-height:150px;overflow-y:auto}
+.doc{display:flex;flex-direction:column;gap:5px;padding:8px 10px;border-radius:12px;font:400 11px var(--font-mono)}
+.doc[data-name]{cursor:pointer;transition:border-color .2s;border:1px solid transparent}
+.doc[data-name]:hover{border-color:var(--a1)}
+.src .neu-btn{padding:3px 8px;font-size:10px;border-radius:9px;margin-bottom:8px}
+.neu-btn.danger:hover,.neu-btn.del:hover{border-color:var(--danger);color:var(--danger)}
+.neu-btn.del{padding:1px 7px;font-size:11px;border-radius:8px;flex:none;line-height:1.4}
+.doc .r{align-items:center}
+.modal{position:fixed;inset:0;z-index:40;display:grid;place-items:center;padding:20px;background:rgba(0,0,0,.66)}
+.modal[hidden]{display:none}
+.modal-card{width:min(1120px,100%);height:min(800px,100%)}
+.tile.modal-card{background:var(--glass-solid);backdrop-filter:none;-webkit-backdrop-filter:none;will-change:auto;transition:none;transform:none!important}
+.tile.modal-card::before,.tile.modal-card::after{display:none}
+.pdf-body{flex:1;min-height:0;display:grid;grid-template-columns:290px 1fr;gap:14px;padding:6px 18px 18px;position:relative;z-index:3}
+.pdf-side{display:flex;flex-direction:column;gap:10px;min-height:0}
+.pdf-side input{width:100%;background:var(--neu);box-shadow:var(--neu-inset);border:1px solid rgba(255,255,255,.04);border-radius:12px;color:var(--text);font:500 12px var(--font-mono);padding:10px}
+.pdf-list{overflow-y:auto;display:flex;flex-direction:column;gap:8px;min-height:0}
+.pdf-item{padding:10px 12px;border-radius:14px;background:var(--glass-elev);border:1px solid var(--glass-border);cursor:pointer;font:500 12px var(--font-mono);display:flex;justify-content:space-between;gap:8px;text-align:left;color:var(--text)}
+.pdf-item span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pdf-item:hover,.pdf-item.active{border-color:var(--a1)}
+.pdf-item.active{box-shadow:0 0 16px var(--glow)}
+.pdf-view{position:relative;overflow:hidden;padding:6px;min-height:260px;display:flex;flex-direction:column;gap:6px}
+.pdf-view [hidden]{display:none!important}
+.pdf-bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:2px 2px 0;font:500 11px var(--font-mono)}
+.pdf-bar .neu-btn{padding:4px 10px;border-radius:10px;font-size:11px}
+.pdf-bar #pdf-pageinfo{margin-right:auto;color:var(--text-2)}
+.pdf-scroll{flex:1;min-height:0;overflow:auto;position:relative;border-radius:12px;background:rgba(127,127,127,.14);padding:12px 0 2px;outline:none;overscroll-behavior:contain}
+.pdf-page{margin:0 auto 14px;background:#fff;box-shadow:0 6px 20px rgba(0,0,0,.4);overflow:hidden}
+.pdf-page canvas{display:block}
+.pdf-view iframe{flex:1;min-height:0;width:100%;border:0;background:#fff;border-radius:12px;display:block}
+.pdf-view .placeholder{position:absolute;inset:0;display:grid;place-items:center}
+@media (max-width:720px){.pdf-body{grid-template-columns:1fr;grid-template-rows:190px 1fr}}
+.doc .r{display:flex;justify-content:space-between;gap:8px}.doc .r span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#map{width:100%;height:210px;border-radius:16px;cursor:grab;touch-action:none}
+#map:active{cursor:grabbing}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);opacity:0;z-index:50;pointer-events:none;padding:10px 16px;border-radius:14px;font:500 12px var(--font-mono);background:var(--glass-solid);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);transition:all .3s}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="hud-grid" aria-hidden="true"></div>
+
+<div class="app">
+  <!-- HEADER -->
+  <header class="tile head c-head">
+    <div class="head-l"><div class="moon" style="--d:42px" aria-hidden="true"></div></div>
+    <div class="brand"><b>TSUKI</b><small>Enterprise Knowledge Engine</small></div>
+    <div class="head-r">
+      <span class="pill" id="conn-pill" role="status" aria-live="polite"><span class="dot beacon" id="conn-dot"></span><span id="conn-text">CONNECTING</span></span>
+      <span class="pill mono" id="mode-pill">MODE: MOCK</span>
+      <button class="neu-btn" id="reality-btn" aria-label="Change reality"><span class="dim">Change Reality //</span> <span id="reality-label" style="color:var(--a1)">01 Eclipse</span></button>
+    </div>
+  </header>
+
+  <!-- CHAT -->
+  <section class="tile c-chat" data-tilt="0" aria-label="Ask the knowledge base">
+    <div class="moon moon-bg" aria-hidden="true"></div>
+    <div class="tile-h">
+      <div><div class="eyebrow">Conversation</div><h2>Ask your knowledge base</h2></div>
+      <button class="neu-btn" id="clear-btn">Clear</button>
+    </div>
+    <div class="tile-b">
+      <div id="chat" class="chat-scroll" role="log" aria-live="polite" aria-relevant="additions text">
+        <div class="empty" id="empty">
+          <h3>Answers grounded<br><span style="color:var(--a1)">in your documents.</span></h3>
+          <p class="muted" style="font-size:13px">Every claim links back to a retrieved source. If nothing relevant is found, TSUKI says so instead of guessing.</p>
+          <div class="chips" id="chips"></div>
+        </div>
+      </div>
+      <form id="composer" class="composer neu-well">
+        <label for="q" class="sr-only">Your question</label>
+        <textarea id="q" rows="1" placeholder="Ask something about your documents…  (Enter to send, Shift+Enter for newline)" maxlength="4000"></textarea>
+        <button type="submit" id="send" class="neu-btn send" aria-label="Send question">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" id="send-ico"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- SOURCES -->
+  <section class="tile c-sources bento-perspective" data-tilt="1" aria-label="Retrieved sources">
+    <div class="tile-h"><div><div class="eyebrow">Retrieval</div><h2>Sources</h2></div><span class="pill" id="src-count">0 chunks</span></div>
+    <div class="tile-b"><div class="src-list" id="src-list"><div class="placeholder">Retrieved chunks and their relevance scores appear here.</div></div></div>
+  </section>
+
+  <!-- CONTROLS -->
+  <section class="tile c-controls" data-tilt="1" aria-label="Retrieval settings">
+    <div class="tile-h"><div><div class="eyebrow">Tuning</div><h2>Retrieval controls</h2></div></div>
+    <div class="tile-b">
+      <div class="neu-well" style="padding:8px 12px"><label class="sr-only" for="collection">Collection</label><select id="collection" class="neu-select"><option>Loading…</option></select></div>
+      <div class="neu-well field"><div class="lbl"><label for="s-topk">TOP-K</label><b id="v-topk">5</b></div><input id="s-topk" class="slider" type="range" min="1" max="20" value="5"></div>
+      <div class="neu-well field"><div class="lbl"><label for="s-thr">MIN SCORE</label><b id="v-thr">0.35</b></div><input id="s-thr" class="slider" type="range" min="0" max="95" value="35"></div>
+      <div class="neu-well field"><div class="lbl"><label for="s-alpha">KEYWORD ↔ SEMANTIC</label><b id="v-alpha">0.70</b></div><input id="s-alpha" class="slider" type="range" min="0" max="100" value="70"></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <button class="neu-btn" id="t-rerank" aria-pressed="true">Rerank on</button>
+        <button class="neu-btn" id="t-stream" aria-pressed="true">Stream on</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section class="tile c-pipe bento-perspective" data-tilt="1" aria-label="Pipeline status">
+    <div class="tile-h"><div><div class="eyebrow">Live trace</div><h2>Pipeline</h2></div></div>
+    <div class="tile-b"><div class="pipe" id="pipe">
+      <div class="stage" data-stage="embed"><span class="dot"></span>Embed query<span class="ms">—</span></div>
+      <div class="stage" data-stage="retrieve"><span class="dot"></span>Vector + keyword search<span class="ms">—</span></div>
+      <div class="stage" data-stage="rerank"><span class="dot"></span>Rerank<span class="ms">—</span></div>
+      <div class="stage" data-stage="generate"><span class="dot"></span>Generate answer<span class="ms">—</span></div>
+    </div></div>
+  </section>
+
+  <!-- METRICS -->
+  <section class="tile c-metrics bento-perspective" data-tilt="1" aria-label="Metrics">
+    <div class="tile-h"><div><div class="eyebrow">Telemetry</div><h2>Metrics</h2></div></div>
+    <div class="tile-b">
+      <div class="kv">
+        <div class="neu-well"><small>Total</small><b id="m-total">—</b></div>
+        <div class="neu-well"><small>First token</small><b id="m-ttft">—</b></div>
+        <div class="neu-well"><small>Tokens out</small><b id="m-tok">—</b></div>
+        <div class="neu-well"><small>Chunks used</small><b id="m-chunks">—</b></div>
+      </div>
+      <div class="eyebrow dim" style="font:500 10px var(--font-mono);letter-spacing:.12em">LATENCY HISTORY (MS)</div>
+      <div class="spark neu-well" id="spark" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- INGESTION -->
+  <section class="tile c-ingest bento-perspective" data-tilt="1" aria-label="Document ingestion">
+    <div class="tile-h"><div><div class="eyebrow">Index</div><h2>Ingestion</h2></div><span class="pill" id="doc-count">0 docs</span></div>
+    <div class="tile-b">
+      <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload documents">Drop PDF files here<br>or click to upload</div>
+      <input type="file" id="file" multiple accept=".pdf,application/pdf" hidden>
+      <div style="display:grid;grid-template-columns:1fr auto;gap:10px"><button class="neu-btn" id="pdf-open" type="button">Browse PDFs</button><button class="neu-btn danger" id="clear-all" type="button" title="Remove every document from the index">Clear all</button></div>
+      <div class="docs" id="docs"></div>
+    </div>
+  </section>
+
+  <!-- EMBEDDING MAP -->
+  <section class="tile c-map bento-perspective" data-tilt="1" aria-label="Embedding space">
+    <div class="tile-h"><div><div class="eyebrow">Vector space</div><h2>Embedding map</h2></div><span class="pill">DRAG</span></div>
+    <div class="tile-b"><div class="neu-well" style="padding:4px"><canvas id="map" aria-label="3D projection of document chunks and the current query" role="img"></canvas></div>
+      <div class="mono dim" style="font-size:10px">Bright = retrieved for last query. Ring = query position.</div></div>
+  </section>
+</div>
+<div class="modal" id="pdf-modal" hidden role="dialog" aria-modal="true" aria-label="PDF browser">
+  <div class="tile modal-card">
+    <div class="tile-h"><div><div class="eyebrow">Knowledge base</div><h2>PDF browser</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="neu-btn" id="pdf-newtab" type="button" disabled>Open in new tab</button><button class="neu-btn" id="pdf-close" type="button">Close</button></div></div>
+    <div class="pdf-body">
+      <aside class="pdf-side"><label class="sr-only" for="pdf-search">Filter documents</label><input id="pdf-search" placeholder="Filter documents…" autocomplete="off"><div class="pdf-list" id="pdf-list"></div></aside>
+      <div class="pdf-view neu-well">
+        <div class="pdf-bar" id="pdf-bar" hidden><span id="pdf-pageinfo">-</span><button class="neu-btn" id="pdf-zout" type="button" aria-label="Zoom out">-</button><button class="neu-btn" id="pdf-zin" type="button" aria-label="Zoom in">+</button><button class="neu-btn" id="pdf-fit" type="button">Fit width</button></div>
+        <div class="pdf-scroll" id="pdf-scroll" tabindex="0" hidden aria-label="PDF pages"></div>
+        <iframe id="pdf-frame" title="PDF preview (fallback viewer)" hidden></iframe>
+        <div class="placeholder" id="pdf-empty">Select a document to preview it</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+(function(){'use strict';
+/* =========================================================================
+   0. BACKEND CONTRACT  (edit CONFIG, or set window.TSUKI_RAG_CONFIG before this script)
+   -------------------------------------------------------------------------
+   mode: 'mock' | 'http'    (also switchable with ?mode=http in the URL)
+   GET  {base}/health                 -> { status:'ok' }
+   GET  {base}/collections            -> [{ id, name, doc_count? }]
+   GET  {base}/documents?collection=  -> [{ id, name, status:'indexed'|'processing'|'failed', progress? }]
+   POST {base}/ingest  (multipart: files[], collection) -> { ok:true }
+   POST {base}/query   JSON { query, collection, top_k, min_score, alpha, rerank, stream }
+        -> text/event-stream with events (data is JSON):
+             stage   { name:'embed'|'retrieve'|'rerank'|'generate', ms }
+             sources [{ id, doc, page?, text, score, pos?:[x,y,z] }]
+             token   { text }
+             done    { total_ms, ttft_ms, tokens, query_pos?:[x,y,z] }
+             error   { message }
+        -> or plain JSON { answer, sources, metrics:{ total_ms, ttft_ms, tokens } } when stream=false
+   POST {base}/feedback { message_id, rating:'up'|'down' }   (optional)
+   Auth: return headers from getHeaders(), e.g. Authorization bearer token.
+   ========================================================================= */
+/* >>> SYNC WITH YOUR BACKEND HERE <<<  Only paths/field names below need to match your FastAPI routes. */
+const DEFAULT_EP = {
+  health:      '/health',
+  collections: '/collections',          // optional: if missing, a single default collection is used
+  documents:   '/documents',            // GET -> ["a.pdf", ...] or [{name|filename, status?, chunks_indexed?}] or {documents:[...]}
+  upload:      '/ingest',               // POST multipart (field 'files', List[UploadFile]) -> { chunks_indexed }
+  query:       '/query',                // POST JSON -> { answer|response, sources:[...] }  (or text/event-stream)
+  feedback:    '/feedback',             // optional
+  pdfFile:     '/pdfs/{name}',          // GET -> the raw PDF bytes, used by the PDF browser
+  deleteDoc:   '/documents/{name}',     // DELETE one document (chunks + stored PDF)
+  clearIndex:  '/index'                 // DELETE everything
+};
+const CONFIG = Object.assign({
+  mode: new URLSearchParams(location.search).get('mode') || 'http',
+  baseUrl: 'http://127.0.0.1:8000',      // your FastAPI server (enable CORS for this page's origin)
+  uploadField: 'files',                  // multipart field name; must match FastAPI's `files: List[UploadFile]`
+  getHeaders: () => ({}),                // e.g. () => ({ Authorization: 'Bearer ' + token })
+  healthPollMs: 15000
+}, window.TSUKI_RAG_CONFIG || {});
+const EP = Object.assign({}, DEFAULT_EP, (window.TSUKI_RAG_CONFIG || {}).endpoints || {});
+
+/* ======================= 1. UTILITIES ======================= */
+const $ = (s, r=document) => r.querySelector(s);
+const $$ = (s, r=document) => [...r.querySelectorAll(s)];
+const clamp = (v,a,b) => Math.max(a, Math.min(b, v));
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+function hashPos(str){ // deterministic pseudo-embedding position when backend gives none
+  let h = 2166136261; const out = [];
+  for (let i=0;i<3;i++){ for (const ch of str+i){ h ^= ch.charCodeAt(0); h = Math.imul(h,16777619); } out.push(((h>>>0)%2000)/1000-1); }
+  return out;
+}
+let toastT; function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('show'),2600); }
+
+/* ======================= 2. STATE ======================= */
+const S = { topK:4, minScore:.45, alpha:.7, rerank:true, stream:true, collection:null, busy:false, abort:null, history:[], msgs:[], lat:[], mapPts:new Map(), hot:new Set(), qpos:null };
+
+/* ---- Persistence: chat history, sources and settings survive a page refresh (browser localStorage) ---- */
+const STORE_KEY = 'tsuki-state-v1';
+const saved = (() => { try { return JSON.parse(localStorage.getItem(STORE_KEY)) || {}; } catch { return {}; } })();
+{ const st = saved.settings || {};
+  if (Number.isFinite(st.topK)) S.topK = clamp(st.topK, 1, 20);
+  if (Number.isFinite(st.minScore)) S.minScore = clamp(st.minScore, 0, .95);
+  if (Number.isFinite(st.alpha)) S.alpha = clamp(st.alpha, 0, 1);
+  if (typeof st.rerank === 'boolean') S.rerank = st.rerank;
+  if (typeof st.stream === 'boolean') S.stream = st.stream; }
+function save(){ try { localStorage.setItem(STORE_KEY, JSON.stringify({
+  settings:{ topK:S.topK, minScore:S.minScore, alpha:S.alpha, rerank:S.rerank, stream:S.stream, collection:S.collection },
+  msgs:S.msgs.slice(-40), sources:curSources.slice(0, 20), lat:S.lat.slice(-20), qpos:S.qpos })); } catch {} }
+
+/* ======================= 3. BACKEND CLIENTS ======================= */
+// ---- HTTP client ----
+const apiUrl = p => CONFIG.baseUrl.replace(/\/$/, '') + p;
+const errText = d => { const x = d && (d.detail ?? d.message ?? d.error); return x == null ? '' : (typeof x === 'string' ? x : JSON.stringify(x)); };
+const normSource = (x, i) => {
+  if (typeof x === 'string') return { id:'s'+i, doc:'Source ' + (i+1), text:x, score:.5 };
+  const m = x.metadata || {};
+  const doc = String(x.doc ?? x.source ?? x.filename ?? x.file ?? m.source ?? m.filename ?? 'Unknown');
+  const page = x.page ?? m.page ?? m.page_number;
+  let score = x.score ?? x.similarity ?? x.relevance; if (score == null && x.distance != null) score = 1/(1+x.distance);
+  return { id: String(x.id ?? doc + ':' + (page ?? i)), doc: doc.split(/[\\/]/).pop(), page, text: String(x.text ?? x.content ?? x.chunk ?? x.page_content ?? ''), score: clamp(+score || .5, 0, 1), pos: x.pos };
+};
+async function fetchT(url, opts = {}, ms = 20000){ // fetch that gives up instead of hanging forever
+  const ac = new AbortController(), t = setTimeout(() => ac.abort(), ms);
+  try { return await fetch(url, { ...opts, signal: ac.signal }); }
+  catch (e){ if (ac.signal.aborted){ const te = new Error('Backend did not respond within ' + ms/1000 + 's'); te.name = 'TimeoutError'; throw te; } throw e; }
+  finally { clearTimeout(t); }
+}
+const http = {
+  async j(path, opts={}){
+    const r = await fetchT(apiUrl(path), { ...opts, headers: { ...(opts.body && !(opts.body instanceof FormData) ? {'Content-Type':'application/json'} : {}), ...CONFIG.getHeaders(), ...(opts.headers||{}) } });
+    if (!r.ok) { let m = ''; try { m = errText(await r.json()); } catch {} throw new Error(m || `${r.status} ${r.statusText}`); }
+    return r.json();
+  },
+  async health(){ await fetchT(apiUrl(EP.health), { headers: CONFIG.getHeaders() }, 4000); }, // any HTTP reply (even 404) means the server is reachable
+  async collections(){
+    try { const d = await http.j(EP.collections); const a = Array.isArray(d) ? d : (d.collections || []);
+      const out = a.map(c => typeof c === 'string' ? { id:c, name:c } : { id:c.id ?? c.name, name:c.name ?? c.id }); if (out.length) return out; } catch {}
+    return [{ id:'default', name:'Default knowledge base' }];
+  },
+  localDocs: [], localFiles: new Map(),   // PDFs uploaded this session (used when the backend has no list / file route)
+  async documents(c){
+    if (EP.documents){ try {
+      const d = await http.j(EP.documents + (c && c !== 'default' ? '?collection=' + encodeURIComponent(c) : ''));
+      const a = Array.isArray(d) ? d : (d.documents || d.files || d.pdfs || []);
+      return a.map(x => typeof x === 'string' ? { id:x, name:x, status:'indexed' }
+        : { id: x.id ?? x.filename ?? x.name, name: String(x.name ?? x.filename ?? x.file ?? x.id), status: x.status ?? 'indexed', chunks: x.chunks ?? x.chunks_indexed ?? x.chunk_count });
+    } catch {} }
+    return http.localDocs.slice();
+  },
+  feedback: (message_id, rating) => http.j(EP.feedback, { method:'POST', body: JSON.stringify({ message_id, rating }) }).catch(()=>{}),
+  async deleteDoc(name){
+    if (!EP.deleteDoc) throw new Error('This backend has no delete route. Update main.py (DELETE /documents/{name}).');
+    const r = await http.j(EP.deleteDoc.replace('{name}', encodeURIComponent(name)), { method:'DELETE' });
+    http.localFiles.delete(name); http.localDocs = http.localDocs.filter(d => d.name !== name); return r;
+  },
+  async clearIndex(){
+    if (!EP.clearIndex) throw new Error('This backend has no clear route. Update main.py (DELETE /index).');
+    await http.j(EP.clearIndex, { method:'DELETE' }); http.localFiles.clear(); http.localDocs = [];
+  },
+  async pdfBlobUrl(name){ // uses this session's upload if we have it, else fetches (with auth headers) from the backend
+    if (http.localFiles.has(name)) return URL.createObjectURL(http.localFiles.get(name));
+    if (!EP.pdfFile) throw new Error('This backend has no PDF route, so only PDFs uploaded in this session can be previewed.');
+    const r = await fetch(apiUrl(EP.pdfFile.replace('{name}', encodeURIComponent(name))), { headers: CONFIG.getHeaders() });
+    if (!r.ok) throw new Error(`Could not load PDF (${r.status})`);
+    return URL.createObjectURL(await r.blob());
+  },
+  async ingest(files, collection, onProgress){   // ONE request with every file -> { chunks_indexed }
+    const res = await new Promise((resolve, reject) => {
+      const fd = new FormData(); files.forEach(f => fd.append(CONFIG.uploadField, f)); if (collection && collection !== 'default') fd.append('collection', collection);
+      const x = new XMLHttpRequest(); x.open('POST', apiUrl(EP.upload));
+      const h = CONFIG.getHeaders(); Object.keys(h).forEach(k => x.setRequestHeader(k, h[k]));
+      x.upload.onprogress = e => e.lengthComputable && onProgress(e.loaded / e.total);
+      x.onload = () => { let d = {}; try { d = JSON.parse(x.responseText); } catch {}
+        x.status < 300 ? resolve(d) : reject(new Error((errText(d) || 'Upload failed') + ' [' + x.status + ' POST ' + EP.upload + ']')); };
+      x.onerror = () => reject(new Error('Request blocked: backend not reachable at ' + CONFIG.baseUrl + ', or CORS is not enabled on it (see browser console)')); x.send(fd);
+    });
+    files.forEach(f => { http.localFiles.set(f.name, f); if (!http.localDocs.some(d => d.name === f.name)) http.localDocs.push({ id:f.name, name:f.name, status:'indexed' }); });
+    return [{ filename: files.map(f => f.name).join(', '), chunks: res.chunks_indexed ?? res.chunks, status: res.status }];
+  },
+  async query(params, h, signal){
+    const t0 = performance.now();
+    const r = await fetch(apiUrl(EP.query), { method:'POST', signal, headers:{ 'Content-Type':'application/json', ...CONFIG.getHeaders() },
+      body: JSON.stringify({ ...params, question: params.query, collection: params.collection === 'default' ? undefined : params.collection }) });
+    if (!r.ok) { let m = ''; try { m = errText(await r.json()); } catch {} throw new Error(m || `Query failed (${r.status})`); }
+    const ct = r.headers.get('content-type') || '';
+    if (!ct.includes('text/event-stream')) { // plain JSON backend
+      const d = await r.json(); const ans = String(d.answer ?? d.response ?? d.result ?? d.text ?? '');
+      const raw = d.retrieved_contexts ?? d.sources ?? d.source_documents ?? d.contexts ?? d.chunks ?? [];
+      h.stage('embed', null); h.stage('retrieve', null); h.stage('rerank', params.rerank ? null : 0);
+      h.sources(raw.map(normSource)); h.token(ans); h.stage('generate', null);
+      h.done(d.metrics || { total_ms: Math.round(performance.now() - t0), ttft_ms: Math.round(performance.now() - t0), tokens: ans.split(/\s+/).filter(Boolean).length }); return;
+    }
+    const rd = r.body.getReader(), dec = new TextDecoder(); let buf = '';
+    for (;;){
+      const { done, value } = await rd.read(); if (done) break;
+      buf += dec.decode(value, { stream:true });
+      let i; while ((i = buf.indexOf('\n\n')) >= 0){
+        const raw = buf.slice(0, i); buf = buf.slice(i+2);
+        let ev = 'message', data = '';
+        raw.split('\n').forEach(l => { if (l.startsWith('event:')) ev = l.slice(6).trim(); else if (l.startsWith('data:')) data += l.slice(5).trim(); });
+        if (!data) continue; let p; try { p = JSON.parse(data); } catch { continue; }
+        if (ev === 'stage') h.stage(p.name, p.ms); else if (ev === 'sources') h.sources((p.sources || p).map(normSource));
+        else if (ev === 'token') h.token(p.text); else if (ev === 'done') h.done(p); else if (ev === 'error') throw new Error(p.message || 'Server error');
+      }
+    }
+  }
+};
+
+// ---- Mock client (runs with zero backend so you can iterate on the UI) ----
+const mock = (() => {
+  const C = [
+    ['Security Policy.pdf',4,'All production access requires SSO with hardware-backed MFA. Shared credentials are prohibited and service accounts rotate every 90 days.'],
+    ['Security Policy.pdf',9,'Security incidents must be reported to the on-call security engineer within 30 minutes of detection, using the incident response channel.'],
+    ['Data Retention Standard.docx',2,'Customer data is retained for 24 months after contract end, then permanently deleted. Backups are purged within 35 days of deletion.'],
+    ['Data Retention Standard.docx',5,'Audit logs are kept for 7 years and stored in immutable, write-once storage with restricted read access.'],
+    ['API Reference v3.md',12,'The public API enforces 600 requests per minute per key. Exceeding the limit returns HTTP 429 with a Retry-After header.'],
+    ['API Reference v3.md',18,'Webhooks are retried with exponential backoff for up to 24 hours. Each delivery includes an HMAC signature header for verification.'],
+    ['Leave Policy 2026.pdf',1,'Full-time employees receive 24 days of paid annual leave, accrued monthly. Up to 5 unused days may be carried over to the next year.'],
+    ['Leave Policy 2026.pdf',3,'Parental leave is 26 weeks at full pay for primary caregivers and 8 weeks for secondary caregivers.'],
+    ['Enterprise SLA.pdf',3,'The platform commits to 99.95% monthly uptime. Service credits of 10% to 30% apply when availability falls below the commitment.'],
+    ['Onboarding Handbook.md',7,'New engineers complete security training in week one, receive a laptop with managed device enrollment, and are assigned an onboarding buddy.'],
+    ['Disaster Recovery Plan.pdf',6,'Recovery time objective is 4 hours and recovery point objective is 15 minutes. Failover to the secondary region is tested quarterly.'],
+    ['Vendor Risk Procedure.docx',8,'Third-party vendors handling customer data must pass a security review and sign a data processing agreement before onboarding.']
+  ].map((c,i) => ({ id:'c'+i, doc:c[0], page:c[1], text:c[2], pos:hashPos(c[0]+c[1]) }));
+  const docs = [...new Set(C.map(c => c.doc))].map((n,i) => ({ id:'d'+i, name:n, status:'indexed' }));
+  const tok = s => s.toLowerCase().match(/[a-z0-9]{3,}/g) || [];
+  return {
+    async health(){ return { status:'ok' }; },
+    async collections(){ return [{ id:'default', name:'Company knowledge base' }, { id:'legal', name:'Legal & compliance' }]; },
+    async documents(){ return docs.slice(); },
+    async feedback(){},
+    async deleteDoc(name){ const i = docs.findIndex(d => d.name === name); if (i >= 0) docs.splice(i, 1); return { chunks_removed: 12 }; },
+    async clearIndex(){ docs.length = 0; },
+    async pdfBlobUrl(){ throw new Error('PDF preview is not available in mock mode'); },
+    async ingest(files, c, onProgress){ for (let i=1;i<=10;i++){ await sleep(120); onProgress(i/10); } return files.map((f,i) => { docs.push({ id:'u'+Date.now()+i, name:f.name, status:'indexed' }); return { filename:f.name, chunks:12, status:'success' }; }); },
+    async query(p, h, signal){
+      const t0 = performance.now(); const wait = async ms => { await sleep(ms); if (signal.aborted) throw new DOMException('aborted','AbortError'); };
+      const q = new Set(tok(p.query));
+      let e = 25 + Math.random()*20; await wait(e); h.stage('embed', Math.round(e));
+      const scored = C.map(c => { const t = tok(c.doc + ' ' + c.text); const ov = t.filter(w => q.has(w)).length;
+        const sem = .3 + .25*((hashPos(p.query + c.id)[0]+1)/2);
+        const kw = Math.min(1, ov/3); return { ...c, score: clamp(p.alpha*sem + (1-p.alpha)*kw + .55*kw*p.alpha, 0, .99) }; });
+      let r = 40 + Math.random()*50; await wait(r); h.stage('retrieve', Math.round(r));
+      let list = scored.filter(s => s.score >= p.min_score).sort((a,b) => b.score-a.score).slice(0, p.top_k);
+      if (p.rerank){ const rr = 60 + Math.random()*80; await wait(rr); h.stage('rerank', Math.round(rr)); list = list.map(s => ({ ...s, score: clamp(s.score + .04, 0, .99) })); } else h.stage('rerank', 0);
+      h.sources(list.map(s => ({ id:s.id, doc:s.doc, page:s.page, text:s.text, score:+s.score.toFixed(3), pos:s.pos })));
+      const g0 = performance.now();
+      let ans;
+      if (!list.length) ans = "I couldn't find anything in the selected collection that answers this with enough confidence. Try rephrasing, lowering the minimum score, or checking another collection.";
+      else ans = 'Based on the retrieved documents:\n\n' + list.slice(0,3).map((s,i) => `**${s.doc.replace(/\.[a-z]+$/i,'')}** states: ${s.text.split('. ')[0].replace(/\.$/,'')}. [${i+1}]`).join('\n\n') + '\n\nUse the source tiles to verify the exact wording.';
+      const words = ans.split(/(\s+)/); let first = null, n = 0;
+      for (const w of words){ if (p.stream) await wait(18); h.token(w); if (first === null) first = performance.now() - t0; if (w.trim()) n++; }
+      h.stage('generate', Math.round(performance.now() - g0));
+      const qp = list.length ? list.reduce((a,s) => a.map((v,i) => v + s.pos[i]/list.length), [0,0,0]) : null;
+      h.done({ total_ms: Math.round(performance.now()-t0), ttft_ms: Math.round(first||0), tokens: n, query_pos: qp });
+    }
+  };
+})();
+const client = CONFIG.mode === 'http' ? http : mock;
+$('#mode-pill').textContent = 'MODE: ' + (CONFIG.mode === 'http' ? 'LIVE API' : 'MOCK DATA');
+
+/* ======================= 4. THEMES ======================= */
+const REALITIES = [
+  { id:'eclipse', label:'01 Eclipse', rgb:['255,183,213','255,214,231','255,143,191'], clear:'rgba(5,4,5,.3)' },
+  { id:'solar',   label:'02 Solar',   rgb:['239,68,68','248,113,113','220,38,38'],  clear:'rgba(6,3,3,.3)' },
+  { id:'aether',  label:'03 Aether',  rgb:['43,134,208','124,196,240','90,169,230'],    clear:'rgba(243,236,224,.34)' }
+];
+let rIdx = 0;
+function setReality(i){ rIdx = i % REALITIES.length; const r = REALITIES[rIdx];
+  document.documentElement.dataset.reality = r.id; $('#reality-label').textContent = r.label;
+  try { localStorage.setItem('tsuki-reality', String(rIdx)); } catch {} ripple(innerWidth/2, 80, 520); }
+$('#reality-btn').addEventListener('click', () => setReality(rIdx+1));
+try { const s = +localStorage.getItem('tsuki-reality'); if (s >= 0 && s < 3) { rIdx = s; document.documentElement.dataset.reality = REALITIES[s].id; $('#reality-label').textContent = REALITIES[s].label; } } catch {}
+
+/* ======================= 5. BACKGROUND (lightweight, pauses when hidden) ======================= */
+const bg = $('#bg'), bx = bg.getContext('2d'); let W, H, P = [], waves = [], mouse = { x:-999, y:-999 };
+function sizeBg(){ W = bg.width = innerWidth; H = bg.height = innerHeight;
+  const n = Math.min(70, Math.floor(W*H/22000)); P = Array.from({length:n}, (_,i) => ({ x:Math.random()*W, y:Math.random()*H, vx:(Math.random()-.5)*.25, vy:(Math.random()-.5)*.25, r:1+Math.random()*1.8, k:i%3 })); }
+sizeBg(); addEventListener('resize', sizeBg);
+addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; }, { passive:true });
+function ripple(x,y,max=420){ waves.push({ x, y, r:8, max, a:.9 }); }
+function drawBg(){
+  const th = REALITIES[rIdx]; bx.fillStyle = th.clear; bx.fillRect(0,0,W,H);
+  for (const p of P){
+    p.x += p.vx; p.y += p.vy; if (p.x<0||p.x>W) p.vx*=-1; if (p.y<0||p.y>H) p.vy*=-1;
+    const dx = p.x-mouse.x, dy = p.y-mouse.y, d = Math.hypot(dx,dy); if (d<140 && d>1){ p.x += dx/d*.9; p.y += dy/d*.9; }
+    bx.beginPath(); bx.arc(p.x,p.y,p.r,0,6.283); bx.fillStyle = `rgba(${th.rgb[p.k]},.55)`; bx.fill();
+  }
+  for (let i=0;i<P.length;i++) for (let j=i+1;j<P.length;j++){ const d = Math.hypot(P[i].x-P[j].x, P[i].y-P[j].y);
+    if (d<110){ bx.beginPath(); bx.moveTo(P[i].x,P[i].y); bx.lineTo(P[j].x,P[j].y); bx.strokeStyle = `rgba(${th.rgb[0]},${(1-d/110)*.2})`; bx.lineWidth=.8; bx.stroke(); } }
+  for (let i=waves.length-1;i>=0;i--){ const w = waves[i]; w.r += 7; w.a *= .965; bx.beginPath(); bx.arc(w.x,w.y,w.r,0,6.283); bx.strokeStyle = `rgba(${th.rgb[0]},${w.a*.5})`; bx.lineWidth=1.6; bx.stroke(); if (w.r>w.max||w.a<.02) waves.splice(i,1); }
+  if (!reduceMotion && !document.hidden) requestAnimationFrame(drawBg);
+}
+drawBg(); document.addEventListener('visibilitychange', () => { if (!document.hidden && !reduceMotion) { drawBg(); drawMap(); } });
+
+/* ======================= 6. TILT + GLINT (not on chat) ======================= */
+$$('.tile').forEach(t => {
+  const tilt = t.dataset.tilt === '1' && !reduceMotion;
+  t.addEventListener('pointermove', e => { const b = t.getBoundingClientRect(), x = e.clientX-b.left, y = e.clientY-b.top;
+    t.style.setProperty('--mx', x+'px'); t.style.setProperty('--my', y+'px');
+    if (tilt && e.pointerType === 'mouse') t.style.transform = `rotateX(${(-(y/b.height-.5)*4).toFixed(2)}deg) rotateY(${((x/b.width-.5)*4).toFixed(2)}deg)`; });
+  t.addEventListener('pointerleave', () => { t.style.transform = ''; });
+});
+
+/* ======================= 7. CHAT RENDERING ======================= */
+const chat = $('#chat'), q = $('#q');
+function renderAnswer(text, streaming){
+  let h = esc(text).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>')
+    .replace(/\[(\d{1,2})\]/g,(m,n) => `<button class="cite" data-cite="${n}" aria-label="Source ${n}">${n}</button>`).replace(/\n/g,'<br>');
+  return h + (streaming ? '<span class="caret"></span>' : '');
+}
+function addMsg(role, html){ $('#empty')?.remove(); const d = document.createElement('div'); d.className = 'msg ' + role; d.innerHTML = html; chat.appendChild(d); chat.scrollTop = chat.scrollHeight; return d; }
+chat.addEventListener('click', e => { const c = e.target.closest('.cite'); if (c) highlightSource(+c.dataset.cite - 1); });
+
+/* ======================= 8. SOURCES ======================= */
+let curSources = [];
+function renderSources(list){
+  curSources = list; $('#src-count').textContent = list.length + ' chunk' + (list.length===1?'':'s');
+  const el = $('#src-list');
+  if (!list.length){ el.innerHTML = '<div class="placeholder">No chunks passed the minimum score.</div>'; return; }
+  el.innerHTML = list.map((s,i) => `<div class="src" data-i="${i}" tabindex="0"><div class="top"><span class="name"><b>[${i+1}]</b> ${esc(s.doc)}${s.page?` · p.${esc(s.page)}`:''}</span><b>${(s.score*100).toFixed(0)}%</b></div><p>${esc(s.text)}</p>${/\.pdf$/i.test(s.doc) ? `<button class="neu-btn" type="button" data-pdf="${esc(s.doc)}" data-page="${esc(s.page ?? '')}">Open page ${esc(s.page ?? '')}</button>` : ''}<div class="bar"><i style="width:0"></i></div></div>`).join('');
+  requestAnimationFrame(() => $$('.src .bar i', el).forEach((b,i) => b.style.width = clamp(list[i].score*100,2,100)+'%'));
+  S.hot = new Set(list.map(s => s.id));
+  list.forEach(s => { if (!S.mapPts.has(s.id)) S.mapPts.set(s.id, { pos: s.pos || hashPos(s.id + s.doc), label: s.doc }); });
+}
+function highlightSource(i){ $$('.src').forEach((n,k) => n.classList.toggle('active', k===i)); $$('.src')[i]?.scrollIntoView({ block:'nearest', behavior:'smooth' }); }
+$('#src-list').addEventListener('click', e => { const b = e.target.closest('[data-pdf]'); if (b){ openPdf(b.dataset.pdf, b.dataset.page); return; } const s = e.target.closest('.src'); if (s) highlightSource(+s.dataset.i); });
+$('#src-list').addEventListener('keydown', e => { if (e.key==='Enter'){ const s = e.target.closest('.src'); if (s) highlightSource(+s.dataset.i); } });
+
+/* ======================= 9. PIPELINE + METRICS ======================= */
+const stageEl = n => $(`.stage[data-stage="${n}"]`);
+function resetPipe(){ $$('.stage').forEach(s => { s.className = 'stage'; $('.ms', s).textContent = '—'; }); }
+function runStage(n){ $$('.stage.run').forEach(s => s.classList.remove('run')); stageEl(n)?.classList.add('run'); }
+const ORDER = ['embed','retrieve','rerank','generate'];
+function doneStage(n, ms){ const el = stageEl(n); if (!el) return; el.classList.remove('run'); el.classList.add(ms === 0 ? 'skip' : 'done'); $('.ms', el).textContent = ms === 0 ? 'skipped' : ms == null ? 'done' : ms + ' ms';
+  const nx = ORDER[ORDER.indexOf(n)+1]; if (nx && S.busy) runStage(nx); }
+function renderSpark(){ const sp = $('#spark'), data = S.lat.slice(-10), mx = Math.max(1, ...data); sp.innerHTML = data.map(v => `<i style="height:${Math.max(6, v/mx*100)}%" title="${v} ms"></i>`).join(''); }
+function setMetrics(m, n){ $('#m-total').textContent = m.total_ms != null ? m.total_ms + ' ms' : '—'; $('#m-ttft').textContent = m.ttft_ms != null ? m.ttft_ms + ' ms' : '—'; $('#m-tok').textContent = m.tokens ?? '—'; $('#m-chunks').textContent = n; if (m.total_ms) { S.lat.push(m.total_ms); renderSpark(); } }
+
+/* ======================= 10. ASK FLOW ======================= */
+function setBusy(b){ S.busy = b; q.disabled = false; $('#send-ico').innerHTML = b ? '<rect x="6" y="6" width="12" height="12" rx="2"/>' : '<path d="M5 12h14M13 6l6 6-6 6"/>'; $('#send').setAttribute('aria-label', b ? 'Stop generating' : 'Send question'); }
+function attachTools(aiEl, answer, msgId){
+  const tools = document.createElement('div'); tools.className = 'msg-tools';
+  tools.innerHTML = '<button class="neu-btn" data-act="copy">Copy</button><button class="neu-btn" data-act="up" aria-label="Helpful">👍</button><button class="neu-btn" data-act="down" aria-label="Not helpful">👎</button>';
+  tools.addEventListener('click', e => { const a = e.target.dataset.act; if (a==='copy'){ navigator.clipboard?.writeText(answer).then(() => toast('Answer copied')); } else if (a){ client.feedback(msgId, a); toast('Thanks for the feedback'); } });
+  aiEl.appendChild(tools);
+}
+function restoreSession(){
+  S.msgs = Array.isArray(saved.msgs) ? saved.msgs : [];
+  S.msgs.forEach(m => { if (m.role === 'user') addMsg('user', esc(m.text)); else attachTools(addMsg('ai', renderAnswer(m.text, false)), m.text, m.id); });
+  if (Array.isArray(saved.sources) && saved.sources.length) renderSources(saved.sources);
+  if (Array.isArray(saved.lat)){ S.lat = saved.lat; renderSpark(); }
+  S.qpos = saved.qpos || null;
+}
+async function ask(text){
+  text = text.trim(); if (!text || S.busy) return;
+  addMsg('user', esc(text)); q.value = ''; autosize();
+  const aiEl = addMsg('ai', '<span class="caret"></span>'); let answer = '', sources = [], metrics = {}; const msgId = 'm' + Date.now();
+  resetPipe(); runStage('embed'); setBusy(true); S.abort = new AbortController(); ripple(innerWidth*.35, innerHeight*.5, 380);
+  const params = { query:text, collection:S.collection, top_k:S.topK, min_score:S.minScore, alpha:S.alpha, rerank:S.rerank, stream:S.stream };
+  const handlers = {
+    stage: (n, ms) => doneStage(n, ms),
+    sources: list => { sources = list; renderSources(list); },
+    token: t => { answer += t; aiEl.innerHTML = renderAnswer(answer, true); chat.scrollTop = chat.scrollHeight; if (!stageEl('generate').classList.contains('done')) runStage('generate'); },
+    done: m => { metrics = m; if (m.query_pos) S.qpos = m.query_pos; }
+  };
+  try { await client.query(params, handlers, S.abort.signal);
+    aiEl.innerHTML = renderAnswer(answer || '(empty response)', false);
+    attachTools(aiEl, answer, msgId); setMetrics(metrics, sources.length);
+    S.history.push({ q:text, a:answer });
+    S.msgs.push({ role:'user', text }, { role:'ai', text:answer, id:msgId }); save();
+  } catch (err){
+    if (err.name === 'AbortError'){ aiEl.innerHTML = renderAnswer(answer || '', false) + '<br><span class="dim mono" style="font-size:11px">[stopped]</span>'; }
+    else { aiEl.classList.add('err'); aiEl.textContent = 'Something went wrong: ' + err.message; setConn('bad','ERROR'); }
+  } finally { $$('.stage.run').forEach(s => s.classList.remove('run')); setBusy(false); S.abort = null; }
+}
+$('#composer').addEventListener('submit', e => { e.preventDefault(); if (S.busy) S.abort?.abort(); else ask(q.value); });
+q.addEventListener('keydown', e => { if (e.key==='Enter' && !e.shiftKey && !e.isComposing){ e.preventDefault(); $('#composer').requestSubmit(); } });
+function autosize(){ q.style.height = 'auto'; q.style.height = Math.min(140, q.scrollHeight) + 'px'; }
+q.addEventListener('input', autosize);
+$('#clear-btn').addEventListener('click', () => { S.abort?.abort(); chat.innerHTML = ''; S.history = []; S.msgs = []; renderSources([]); S.hot = new Set(); S.qpos = null; resetPipe(); save(); toast('Conversation cleared'); });
+['What is our data retention period?','What are the API rate limits?','How fast must security incidents be reported?','How many days of annual leave do employees get?'].forEach(t => {
+  const b = document.createElement('button'); b.className = 'neu-btn'; b.textContent = t; b.style.textTransform = 'none'; b.addEventListener('click', () => ask(t)); $('#chips').appendChild(b); });
+
+/* ======================= 11. CONTROLS ======================= */
+const bind = (id, vid, fmt, set) => $(id).addEventListener('input', e => { const v = +e.target.value; $(vid).textContent = fmt(v); set(v); save(); });
+bind('#s-topk','#v-topk', v => v, v => S.topK = v);
+bind('#s-thr','#v-thr', v => (v/100).toFixed(2), v => S.minScore = v/100);
+bind('#s-alpha','#v-alpha', v => (v/100).toFixed(2), v => S.alpha = v/100);
+function toggle(id, key, on, off){ const b = $(id); b.addEventListener('click', () => { S[key] = !S[key]; b.setAttribute('aria-pressed', S[key]); b.textContent = S[key] ? on : off; save(); }); }
+toggle('#t-rerank','rerank','Rerank on','Rerank off'); toggle('#t-stream','stream','Stream on','Stream off');
+$('#s-topk').value = S.topK; $('#v-topk').textContent = S.topK;
+$('#s-thr').value = Math.round(S.minScore*100); $('#v-thr').textContent = S.minScore.toFixed(2);
+$('#s-alpha').value = Math.round(S.alpha*100); $('#v-alpha').textContent = S.alpha.toFixed(2);
+[['#t-rerank','rerank','Rerank on','Rerank off'],['#t-stream','stream','Stream on','Stream off']].forEach(([id,k,on,off]) => { const b = $(id); b.setAttribute('aria-pressed', S[k]); b.textContent = S[k] ? on : off; });
+$('#collection').addEventListener('change', e => { S.collection = e.target.value; save(); S.mapPts.clear(); S.hot = new Set(); loadDocs(); });
+
+/* ======================= 12. CONNECTION / COLLECTIONS / DOCS ======================= */
+function setConn(kind, text){ $('#conn-dot').className = 'dot' + (kind==='ok' ? '' : kind==='warn' ? ' warn' : ' bad'); $('#conn-text').textContent = text; }
+let online = false;
+async function checkHealth(){
+  try { await client.health(); setConn('ok','ONLINE'); if (!online){ online = true; loadCollections(); } }
+  catch (e){ online = false; e.name === 'TimeoutError' ? setConn('warn','NOT RESPONDING') : setConn('bad','OFFLINE'); }
+}
+async function pollHealth(){ await checkHealth(); setTimeout(pollHealth, online ? CONFIG.healthPollMs : 4000); } // retries every 4s until the backend is up
+async function loadCollections(){ try { const cols = await client.collections(); const sel = $('#collection');
+    sel.innerHTML = cols.map(c => `<option value="${esc(c.id)}">${esc(c.name)}</option>`).join(''); S.collection = cols.find(c => c.id === (S.collection || saved.settings?.collection))?.id || cols[0]?.id || null; sel.value = S.collection; await loadDocs(); }
+  catch (e){ $('#collection').innerHTML = '<option>Unavailable</option>'; } }
+async function loadDocs(){ try { const docs = await client.documents(S.collection); renderDocs(docs); } catch { renderDocs([]); } }
+let docsCache = [];
+function renderDocs(docs){ docsCache = docs; $('#doc-count').textContent = docs.length + ' doc' + (docs.length===1?'':'s');
+  $('#docs').innerHTML = docs.slice().reverse().map(d => `<div class="doc neu-well" data-name="${esc(d.name)}" tabindex="0" role="button" title="Open ${esc(d.name)}"><div class="r"><span>${esc(d.name)}</span><span style="color:${d.status==='indexed'?'var(--a1)':d.status==='failed'?'var(--danger)':'var(--warn)'}">${d.chunks!=null ? esc(d.chunks)+' chunks' : esc(d.status)}</span><button type="button" class="neu-btn del" data-del="${esc(d.name)}" aria-label="Delete ${esc(d.name)}" title="Delete from index">✕</button></div></div>`).join('');
+  if (!$('#pdf-modal').hidden) renderPdfList(); }
+$('#docs').addEventListener('click', e => { const x = e.target.closest('[data-del]'); if (x){ e.stopPropagation(); deleteDocument(x.dataset.del); return; } const d = e.target.closest('[data-name]'); if (d) openPdf(d.dataset.name); });
+$('#docs').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.target.closest('[data-del]')){ const d = e.target.closest('[data-name]'); if (d) openPdf(d.dataset.name); } });
+async function deleteDocument(name){
+  if (!confirm(`Delete "${name}" and remove its chunks from the index?\nThis cannot be undone.`)) return;
+  try { const r = await client.deleteDoc(name);
+    toast(r && r.chunks_removed != null ? `Deleted ${name} (${r.chunks_removed} chunks)` : `Deleted ${name}`);
+    for (const [id, v] of [...S.mapPts]) if (v.label === name) S.mapPts.delete(id);
+    if (pdfCurrent === name) closePdf();
+    await loadDocs();
+  } catch (e){ toast(e.message); console.error('[TSUKI] delete failed:', e); }
+}
+async function clearIndex(){
+  if (!confirm('Remove ALL documents and chunks from the index?\nThis cannot be undone.')) return;
+  try { await client.clearIndex(); S.mapPts.clear(); S.hot = new Set(); renderSources([]); toast('Index cleared'); await loadDocs(); }
+  catch (e){ toast(e.message); console.error('[TSUKI] clear failed:', e); }
+}
+$('#clear-all').addEventListener('click', clearIndex);
+
+const drop = $('#drop'), file = $('#file');
+drop.addEventListener('click', () => file.click());
+drop.addEventListener('keydown', e => { if (e.key==='Enter' || e.key===' '){ e.preventDefault(); file.click(); } });
+['dragenter','dragover'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add('over'); }));
+['dragleave','drop'].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove('over'); }));
+drop.addEventListener('drop', e => upload([...e.dataTransfer.files]));
+['dragover','drop'].forEach(ev => addEventListener(ev, e => e.preventDefault())); // stops the browser opening a PDF dropped outside the zone
+file.addEventListener('change', () => { upload([...file.files]); file.value = ''; });
+async function upload(files){
+  const pdfs = files.filter(f => /\.pdf$/i.test(f.name));
+  if (pdfs.length < files.length) toast('Only PDF files are supported - skipped ' + (files.length - pdfs.length));
+  files = pdfs; if (!files.length) return;
+  const row = document.createElement('div'); row.className = 'doc neu-well'; row.innerHTML = `<div class="r"><span>${esc(files.map(f => f.name).join(', '))}</span><span class="dim">uploading</span></div><div class="bar"><i style="width:0"></i></div>`;
+  $('#docs').prepend(row); const bar = $('i', row), status = $('.r span:last-child', row);
+  try {
+    const res = await client.ingest(files, S.collection, p => { bar.style.width = (p*100)+'%'; if (p >= 1) status.textContent = 'indexing…'; });
+    bar.style.width = '100%'; const total = res.reduce((n, r) => n + (+r.chunks || 0), 0);
+    status.textContent = total ? total + ' chunks indexed' : 'indexed'; status.style.color = 'var(--a1)';
+    toast(total ? `${files.length} file(s) indexed · ${total} chunks` : `${files.length} file(s) indexed`);
+    setTimeout(loadDocs, 600);
+  } catch (e){ status.textContent = 'failed'; status.style.color = 'var(--danger)'; toast(e.message); console.error('[TSUKI] upload failed:', e);
+    const why = document.createElement('div'); why.style.cssText = 'white-space:normal;overflow-wrap:anywhere;color:var(--danger);font-size:11px'; why.textContent = e.message; row.appendChild(why); }
+}
+
+/* ---- PDF browser ---- */
+let pdfBlob = null, pdfCurrent = null;
+const pdfModal = $('#pdf-modal'), pdfFrame = $('#pdf-frame'), pdfEmpty = $('#pdf-empty');
+function renderPdfList(){
+  const f = $('#pdf-search').value.trim().toLowerCase(); let list = docsCache.filter(d => /\.pdf$/i.test(d.name)); if (!list.length) list = docsCache;
+  list = list.filter(d => d.name.toLowerCase().includes(f));
+  $('#pdf-list').innerHTML = list.length ? list.map(d => `<button type="button" class="pdf-item${d.name===pdfCurrent?' active':''}" data-name="${esc(d.name)}"><span title="${esc(d.name)}">${esc(d.name)}</span><span class="dim">${d.chunks!=null?esc(d.chunks):''}</span></button>`).join('') : '<div class="placeholder">No documents found.</div>';
+}
+/* ---- In-window PDF viewer (PDF.js): pages are drawn on canvases inside a normal scrolling <div>, so wheel,
+   touchpad, scrollbar and keyboard scrolling always work. Only pages near the viewport are kept rendered. ---- */
+const PDFJS_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/';
+let pdfLibP = null;
+function loadPdfJs(){
+  if (window.pdfjsLib){ pdfjsLib.GlobalWorkerOptions.workerSrc ||= PDFJS_BASE + 'pdf.worker.min.js'; return Promise.resolve(window.pdfjsLib); }
+  return pdfLibP ||= new Promise((res, rej) => { const sc = document.createElement('script'); sc.src = PDFJS_BASE + 'pdf.min.js';
+    sc.onload = () => { window.pdfjsLib.GlobalWorkerOptions.workerSrc = PDFJS_BASE + 'pdf.worker.min.js'; res(window.pdfjsLib); };
+    sc.onerror = () => { pdfLibP = null; rej(new Error('PDF renderer could not be loaded (needs internet access to cdnjs.cloudflare.com)')); };
+    document.head.appendChild(sc); });
+}
+const V = { token:0, doc:null, els:[], sizes:[], scale:1, fit:1, cur:1, raf:0 };
+const pdfScroll = $('#pdf-scroll'), pdfBar = $('#pdf-bar');
+function teardownViewer(){ try { V.doc?.destroy(); } catch {} V.doc = null; V.els = []; V.sizes = []; pdfScroll.innerHTML = ''; pdfScroll.hidden = true; pdfBar.hidden = true; }
+function layoutPages(){ V.els.forEach((el, i) => { el.style.width = V.sizes[i].w * V.scale + 'px'; el.style.height = V.sizes[i].h * V.scale + 'px'; el.replaceChildren(); delete el.dataset.done; }); }
+function updatePageInfo(){
+  const mid = pdfScroll.scrollTop + pdfScroll.clientHeight * .35; let cur = 1;
+  for (let i = 0; i < V.els.length; i++){ if (V.els[i].offsetTop <= mid) cur = i + 1; else break; }
+  V.cur = cur; $('#pdf-pageinfo').textContent = `Page ${cur} / ${V.els.length}  ·  ${Math.round(V.scale * 100)}%`;
+}
+async function renderPage(n){
+  const el = V.els[n - 1], scale = V.scale, tok = V.token, key = String(scale);
+  if (!el || el.dataset.done === key || el.dataset.busy === key) return;
+  el.dataset.busy = key;
+  try {
+    const page = await V.doc.getPage(n), vp = page.getViewport({ scale }), dpr = Math.min(devicePixelRatio || 1, 2);
+    const cv = document.createElement('canvas'); cv.width = Math.floor(vp.width * dpr); cv.height = Math.floor(vp.height * dpr);
+    cv.style.width = vp.width + 'px'; cv.style.height = vp.height + 'px';
+    await page.render({ canvasContext: cv.getContext('2d'), viewport: vp, transform: dpr !== 1 ? [dpr, 0, 0, dpr, 0, 0] : null }).promise;
+    if (tok !== V.token || scale !== V.scale) return;
+    el.replaceChildren(cv); el.dataset.done = key;
+  } catch (e){ console.warn('[TSUKI] page render failed', n, e); }
+  finally { if (el.dataset.busy === key) delete el.dataset.busy; }
+}
+function renderVisible(){
+  if (!V.doc) return;
+  const top = pdfScroll.scrollTop - 900, bot = pdfScroll.scrollTop + pdfScroll.clientHeight + 900;
+  V.els.forEach((el, i) => { const t = el.offsetTop, b = t + el.offsetHeight;
+    if (b >= top && t <= bot) renderPage(i + 1); else if (el.firstChild){ el.replaceChildren(); delete el.dataset.done; } });
+}
+function gotoPage(n){ n = clamp(n, 1, V.els.length || 1); const el = V.els[n - 1]; if (el) pdfScroll.scrollTop = el.offsetTop - 12; }
+function setZoom(z){
+  if (!V.doc) return; const ratio = pdfScroll.scrollTop / Math.max(1, pdfScroll.scrollHeight);
+  V.scale = clamp(z, .4, 4); layoutPages(); pdfScroll.scrollTop = ratio * pdfScroll.scrollHeight; renderVisible(); updatePageInfo();
+}
+pdfScroll.addEventListener('scroll', () => { if (V.raf) return; V.raf = requestAnimationFrame(() => { V.raf = 0; renderVisible(); updatePageInfo(); }); }, { passive:true });
+$('#pdf-zin').addEventListener('click', () => setZoom(V.scale * 1.2));
+$('#pdf-zout').addEventListener('click', () => setZoom(V.scale / 1.2));
+$('#pdf-fit').addEventListener('click', () => setZoom(V.fit));
+async function showInWindow(blobUrl, page, token){
+  const lib = await loadPdfJs();
+  const doc = await lib.getDocument({ url: blobUrl }).promise;
+  if (token !== V.token){ doc.destroy(); return; }
+  const sizes = await Promise.all(Array.from({ length: doc.numPages }, (_, i) => doc.getPage(i + 1).then(p => { const v = p.getViewport({ scale:1 }); return { w:v.width, h:v.height }; })));
+  if (token !== V.token){ doc.destroy(); return; }
+  teardownViewer(); V.doc = doc; V.sizes = sizes; pdfBar.hidden = false; pdfScroll.hidden = false;
+  V.fit = clamp((pdfScroll.clientWidth - 40) / sizes[0].w, .4, 3); V.scale = V.fit;
+  V.els = sizes.map((_, i) => { const d = document.createElement('div'); d.className = 'pdf-page'; d.dataset.n = i + 1; pdfScroll.appendChild(d); return d; });
+  layoutPages(); gotoPage(page ? +page : 1); renderVisible(); updatePageInfo(); pdfScroll.focus({ preventScroll:true });
+}
+async function openPdf(name, page){
+  pdfModal.hidden = false; document.body.style.overflow = 'hidden';
+  if (!docsCache.length) await loadDocs(); renderPdfList();
+  if (!name) return;
+  const token = ++V.token; teardownViewer();
+  pdfCurrent = name; renderPdfList(); pdfFrame.hidden = true; pdfFrame.src = 'about:blank'; pdfEmpty.hidden = false; $('#pdf-newtab').disabled = true; pdfEmpty.textContent = 'Loading ' + name + '…';
+  try {
+    const u = await client.pdfBlobUrl(name); if (token !== V.token){ URL.revokeObjectURL(u); return; }
+    if (pdfBlob) URL.revokeObjectURL(pdfBlob); pdfBlob = u; $('#pdf-newtab').disabled = false;
+    try { await showInWindow(u, page, token); if (token === V.token) pdfEmpty.hidden = true; }
+    catch (err){ if (token !== V.token) return; console.warn('[TSUKI] in-window viewer unavailable, using the browser viewer instead:', err);
+      teardownViewer(); pdfFrame.src = u + (page ? '#page=' + encodeURIComponent(page) : ''); pdfFrame.hidden = false; pdfEmpty.hidden = true; }
+  } catch (e){ if (token === V.token){ pdfEmpty.hidden = false; pdfEmpty.textContent = e.message; } }
+}
+function closePdf(){ V.token++; teardownViewer(); pdfModal.hidden = true; document.body.style.overflow = ''; pdfFrame.src = 'about:blank'; pdfFrame.hidden = true; pdfCurrent = null; $('#pdf-newtab').disabled = true; if (pdfBlob){ URL.revokeObjectURL(pdfBlob); pdfBlob = null; } pdfEmpty.hidden = false; pdfEmpty.textContent = 'Select a document to preview it'; }
+$('#pdf-open').addEventListener('click', () => openPdf());
+$('#pdf-close').addEventListener('click', closePdf);
+$('#pdf-newtab').addEventListener('click', () => { if (pdfBlob) window.open(pdfBlob + '#page=' + (V.cur || 1), '_blank'); });
+pdfModal.addEventListener('click', e => { if (e.target === pdfModal) closePdf(); });
+addEventListener('keydown', e => { if (e.key === 'Escape' && !pdfModal.hidden) closePdf(); });
+$('#pdf-search').addEventListener('input', renderPdfList);
+$('#pdf-list').addEventListener('click', e => { const b = e.target.closest('[data-name]'); if (b) openPdf(b.dataset.name); });
+
+/* ======================= 13. EMBEDDING MAP (3D) ======================= */
+const map = $('#map'), mx = map.getContext('2d'); let rot = { x:.35, y:.4, vy:.003 }, drag = null;
+function sizeMap(){ const r = map.getBoundingClientRect(), d = devicePixelRatio || 1; map.width = r.width*d; map.height = r.height*d; }
+sizeMap(); addEventListener('resize', sizeMap);
+map.addEventListener('pointerdown', e => { drag = { x:e.clientX, y:e.clientY }; map.setPointerCapture(e.pointerId); });
+map.addEventListener('pointermove', e => { if (!drag) return; rot.y += (e.clientX-drag.x)*.01; rot.x += (e.clientY-drag.y)*.01; drag = { x:e.clientX, y:e.clientY }; });
+map.addEventListener('pointerup', () => drag = null);
+function proj(p, cx, cy, R){ const [x,y,z] = p, cX=Math.cos(rot.x), sX=Math.sin(rot.x), cY=Math.cos(rot.y), sY=Math.sin(rot.y);
+  const y1 = y*cX - z*sX, z1 = y*sX + z*cX, x2 = x*cY + z1*sY, z2 = -x*sY + z1*cY, k = 3/(3+z2); return { x:cx+x2*R*k, y:cy+y1*R*k, k, z:z2 }; }
+function drawMap(){
+  const w = map.width, h = map.height, cx = w/2, cy = h/2, R = Math.min(w,h)*.36, th = REALITIES[rIdx];
+  mx.clearRect(0,0,w,h); if (!drag && !reduceMotion) rot.y += rot.vy;
+  mx.strokeStyle = `rgba(${th.rgb[1]},.18)`; mx.lineWidth = 1; // wireframe equator rings for depth cue
+  for (const t of [0, .5, -.5]){ mx.beginPath(); for (let j=0;j<=48;j++){ const a = j/48*6.283, rr = Math.sqrt(1-t*t); const p = proj([rr*Math.cos(a), t, rr*Math.sin(a)], cx, cy, R); j ? mx.lineTo(p.x,p.y) : mx.moveTo(p.x,p.y); } mx.stroke(); }
+  const pts = [...S.mapPts.entries()].map(([id,v]) => ({ id, p: proj(v.pos.map(c => clamp(c,-1,1)*.9), cx, cy, R) })).sort((a,b) => a.p.z-b.p.z);
+  const qp = S.qpos ? proj(S.qpos.map(c => clamp(c,-1,1)*.9), cx, cy, R) : null;
+  for (const {id,p} of pts){ const hot = S.hot.has(id);
+    if (hot && qp){ mx.beginPath(); mx.moveTo(qp.x,qp.y); mx.lineTo(p.x,p.y); mx.strokeStyle = `rgba(${th.rgb[0]},.45)`; mx.lineWidth = 1.2; mx.stroke(); }
+    mx.beginPath(); mx.arc(p.x,p.y,(hot?5:3)*p.k*(devicePixelRatio||1),0,6.283); mx.fillStyle = hot ? `rgba(${th.rgb[0]},.95)` : `rgba(${th.rgb[1]},.4)`; if (hot){ mx.shadowColor = `rgba(${th.rgb[0]},.9)`; mx.shadowBlur = 14; } mx.fill(); mx.shadowBlur = 0; }
+  if (qp){ mx.beginPath(); mx.arc(qp.x,qp.y,9*(devicePixelRatio||1),0,6.283); mx.strokeStyle = `rgba(${th.rgb[2]},.95)`; mx.lineWidth = 2; mx.stroke(); }
+  if (!pts.length){ mx.fillStyle = `rgba(${th.rgb[1]},.6)`; mx.font = `${11*(devicePixelRatio||1)}px ${getComputedStyle(document.body).getPropertyValue('--font-mono')}`; mx.textAlign = 'center'; mx.fillText('Run a query to populate', cx, cy); }
+  if (!document.hidden && !reduceMotion) requestAnimationFrame(drawMap);
+}
+drawMap();
+if (reduceMotion) setInterval(drawMap, 400);
+
+/* ---- Auto-sync routes from FastAPI's /openapi.json (explicit TSUKI_RAG_CONFIG values always win) ---- */
+async function discoverRoutes(){
+  if (CONFIG.mode !== 'http' || CONFIG.autoDiscover === false) return;
+  try {
+    const r = await fetchT(apiUrl('/openapi.json'), { headers: CONFIG.getHeaders() }, 4000); if (!r.ok) return;
+    const spec = await r.json(), user = (window.TSUKI_RAG_CONFIG || {}), uep = user.endpoints || {};
+    const paths = Object.entries(spec.paths || {});
+    const resolve = o => o && o.$ref ? o.$ref.replace('#/', '').split('/').reduce((a, k) => a && a[k], spec) : o;
+    const set = (key, val) => { if (val && !uep[key]) EP[key] = val; };
+    const ups = paths.filter(([p, v]) => v.post?.requestBody?.content?.['multipart/form-data']);
+    const up = ups.find(([p]) => /ingest|upload/i.test(p)) || ups[0];
+    if (up){ set('upload', up[0]);
+      const sch = resolve(up[1].post.requestBody.content['multipart/form-data'].schema), props = Object.keys(sch?.properties || {});
+      const fld = props.find(k => /^files?$/.test(k)) || props[0]; if (fld && !user.uploadField) CONFIG.uploadField = fld; }
+    set('query',  paths.find(([p, v]) => v.post && p !== up?.[0] && /query|chat|ask|search|rag/i.test(p))?.[0]);
+    set('health', paths.find(([p, v]) => v.get && /health|ping|status/i.test(p))?.[0]);
+    if (!uep.documents) EP.documents = paths.find(([p, v]) => v.get && !/\{/.test(p) && /doc|file|pdf|source|list/i.test(p))?.[0] || null;
+    const f = paths.find(([p, v]) => v.get && /\{[^}]+\}/.test(p) && /pdf|file|doc|download/i.test(p)); if (!uep.pdfFile) EP.pdfFile = f ? f[0].replace(/\{[^}]+\}/, '{name}') : null;
+    if (!uep.deleteDoc) EP.deleteDoc = paths.find(([p, v]) => v.delete && /\{[^}]+\}/.test(p) && /doc|file|pdf/i.test(p))?.[0].replace(/\{[^}]+\}/, '{name}') || null;
+    if (!uep.clearIndex) EP.clearIndex = paths.find(([p, v]) => v.delete && !/\{/.test(p))?.[0] || null;
+    console.info('[TSUKI] routes synced from /openapi.json', { ...EP, uploadField: CONFIG.uploadField });
+  } catch (e) { console.warn('[TSUKI] route discovery skipped', e); }
+}
+
+/* ======================= 14. BOOT ======================= */
+(async function boot(){ restoreSession(); await discoverRoutes(); pollHealth(); })();
+})();
+</script>
+</body>
+</html>
