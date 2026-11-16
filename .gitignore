@@ -1,0 +1,7 @@
+﻿.venv/
+.idea/
+__pycache__/
+*.pyc
+.env
+qdrant_storage/
+uploaded_docs/
