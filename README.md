@@ -6,8 +6,9 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 > **TSUKI (月)** is a production-grade, containerized "local-first" Retrieval-Augmented Generation (RAG) system paired with a glassmorphic spatial OS dashboard. Built for high-performance AI engineering portfolios, it bridges robust backend vector infrastructure with zero-latency spatial UI/UX.
-<img width="1920" height="1016" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/9f984320-6d96-4a40-8095-e1faf1e6fedd" />
-<img width="1920" height="1034" alt="Screenshot (38)" src="https://github.com/user-attachments/assets/95edc622-c910-4d10-8fd2-b72147f16303" />
+<img width="1920" height="965" alt="Screenshot (37)" src="https://github.com/user-attachments/assets/05613959-5801-4ac8-bf03-c16d30f2ec22" />
+<img width="1920" height="964" alt="Screenshot (38)" src="https://github.com/user-attachments/assets/c1e6fe05-cd3f-47a6-9548-d138df38e55c" />
+
 
 ---
 
